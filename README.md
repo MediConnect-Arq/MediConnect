@@ -20,6 +20,12 @@ Este proyecto es usado por las siguientes compañias:
 - HealthSolutions
 
 
+## Autores
+
+- [@quevedito](https://www.github.com/quevedito2)
+- [@GabySol26](https://www.github.com/GabySol26)
+
+
 ## Feedback
 
 Si tiene algún comentario o recomendación, comuníquese con nosotros: u202113876@upc.edu.pe y u201619823@upc.edu.pe
