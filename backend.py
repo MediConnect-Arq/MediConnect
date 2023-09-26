@@ -145,6 +145,111 @@ def medicamentos():
         'Medicamento': data
     })
 
+#GET'S BY ID
+
+@app.route('/paciente/<string:id>', methods=['GET', 'POST'])
+def paciente_id(id):
+    conn = mysql.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    print(id)
+    cursor.execute("SELECT * FROM Paciente WHERE idPaciente = %s", [id])
+    row = cursor.fetchone()
+
+    return jsonify({
+        'status': 'success',
+        'paciente' + id : row
+    })
+
+@app.route('/especialidad/<string:id>', methods=['GET', 'POST'])
+def especialidad_id(id):
+    conn = mysql.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    print(id)
+    cursor.execute("SELECT * FROM Especialidad WHERE IdEspecialidad = %s", [id])
+    row = cursor.fetchone()
+
+    return jsonify({
+        'status': 'success',
+        'especialidad' + id: row
+    })
+
+@app.route('/medico/<string:id>', methods=['GET', 'POST'])
+def medico_id(id):
+    conn = mysql.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    print(id)
+    cursor.execute("SELECT * FROM Medico WHERE idMedico = %s", [id])
+    row = cursor.fetchone()
+
+    return jsonify({
+        'status': 'success',
+        'medico' + id: row
+    })        
+
+@app.route('/cita/<string:id>', methods=['GET', 'POST'])    
+def cita_id(id):
+    conn = mysql.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    print(id)
+    cursor.execute("SELECT * FROM Cita WHERE idCita = %s", [id])
+    row = cursor.fetchone()
+    return jsonify({
+        'status': 'success',
+        'cita' + id: row
+    })
+
+@app.route('/tratamiento/<string:id>', methods=['GET', 'POST'])
+def tratamiento_id(id):
+    conn = mysql.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    print(id)
+    cursor.execute("SELECT * FROM Tratamiento WHERE idTratamiento = %s", [id])
+    row = cursor.fetchone()
+
+    return jsonify({
+        'status': 'success',
+        'tratamiento' + id: row
+    })
+
+@app.route('/compra/<string:id>', methods=['GET', 'POST'])
+def compra_id(id):
+    conn = mysql.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    print(id)
+    cursor.execute("SELECT * FROM Compra WHERE idCompra = %s", [id])
+    row = cursor.fetchone()
+
+    return jsonify({
+        'status': 'success',
+        'compra' + id: row
+    })
+
+@app.route('/schedule/<string:id>', methods=['GET', 'POST'])
+def schedule_id(id):
+    conn = mysql.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    print(id)
+    cursor.execute("SELECT * FROM Schedule WHERE idSchedule = %s", [id])
+    row = cursor.fetchone() 
+    row['Hora'] = str(row['Hora'])
+    return jsonify({
+        'status': 'success',
+        'schedule' + id: row
+    })
+
+@app.route('/medicamento/<string:id>', methods=['GET', 'POST'])
+def medicamento_id(id):
+    conn = mysql.connect()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    print(id)
+    cursor.execute("SELECT * FROM Medicamento WHERE idMedicamento = %s", [id])
+    row = cursor.fetchone()
+
+    return jsonify({
+        'status': 'success',
+        'medicamento' + id: row
+    })
+
 
 
 if __name__ == '__main__':
