@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Index</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app" class="container justify-content-between">
+    <h1>Bienvenido</h1>
+    <h1>Selecciona tu categoría!</h1>
+    <div class="row">
+      <div class="col d-flex justify-content-between">
+        <button class="btn btn-success btn-lg" @click="goToPage('menuP.html')">Soy Paciente</button>
+        <button class="btn btn-success btn-lg" @click="goToPage('menuM.html')">Soy Médico</button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      methods: {
+        goToPage(page) {
+          window.location.href = page;
+        }
+      }
+    });
+  </script>
+</body>
+</html>

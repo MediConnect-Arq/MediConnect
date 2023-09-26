@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css">
+    <title>Tabla Medicos</title>
+</head>
+<body>
+<div class="container" id="vuejscrudapp">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">MEDICOS</h1>
+            <hr>
+        </div>
+    </div>
+
+    <!--MOSTRAR-->
+
+    <div class="row">
+        <div class="col-md-4" v-for="medic in medics" :key="medic.idMedico">
+          <div class="card">
+            <div class="card-body">
+              <td>ID: {{ medic.IdMedico }}</td><br>
+              <td>Nombre: {{ medic.NombreM }} {{ medic.ApellidoPM }} {{ medic.ApellidoMM }}</td><br>
+              <td>DNI: {{ medic.DniM }}</td><br>
+              <td>Genero: {{ medic.GeneroM }}</td><br>
+              <td>Email: {{ medic.EmailM }}</td><br>
+              <td>Telefono: {{ medic.TelefonoM }}</td><br>
+              <td>N° Colegial: {{ medic.NumColegialM }}</td><br>
+            </div>
+          </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            idMedico: '',
+            nombreM: '',
+            apellidoPM: '',
+            apellidoMM: '',
+            dniM: '',
+            generoM: '',
+            emailM: '',
+            telefonoM: '',
+            numColegialM: '',
+            especialidad: '',
+            medics: [],
+        },
+        methods: {
+            showModal(id) {
+                this.$refs[id].show()
+            },
+
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
+
+            getMedicos() {
+                axios.get('http://127.0.0.1:5000/medicos')
+                    .then(response => {
+                        console.log(response)
+                        this.medics = response.data.Medicos
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+
+      },
+
+        mounted() {
+            this.getMedicos()
+        }
+    })
+</script>
+</body>
+</html>
+
+<style>
+.card{
+    margin: 20px;
+    padding: 10px;
+    
+  }
+
+.card .card-body .btn
+{
+  margin: 10px auto;
+  align-items: center;
+}
+</style>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediconnect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container" id="vuejscrudapp">
+                <div>
+                    <h1>Mediconnect</h1>
+                </div>
+                <div class="user-info">
+                    <a href="#"><i class="fas fa-user"></i> 
+                        <span>{{ patients.NombreM}} </span>
+                        <span>{{ patients.ApellidoPM}} </span>   
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="Pacientes.html"><i class="fas fa-info-circle"></i>Pacientes</a></li>
+                    <li><a href="Schedules.html"><i class="fas fa-receipt"></i>Schedule</a></li>
+                    <li><a href="Citas.html"><i class="fas fa-envelope"></i> Citas</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content">
+        <div class="card-container">
+            <div class="card button-card">
+                <i class="fas fa-star"></i>
+                <h2>Bienvenido!</h2>
+                <p>Ofrece tus servicios!</p>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="card button-card">
+                <a href="Pacientes.html" class="button-link">
+                    <i class="fas fa-laptop-medical"></i>
+                    <h2>Pacientes</h2>
+                    <p>Lleva un buen registro de tus pacientes</p>
+                </a>
+            </div>
+            <div class="card button-card">
+                <a href="Schedules.html" class="button-link">
+                    <i class="fas fa-hospital"></i>
+                    <h2>Schedule</h2>
+                    <p>Ingresa  tus horarios</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="button-container">
+            <button class="btn" onclick="goToPage('Citas.html')">Ver Citas</button>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        var app = new Vue({
+            el: '#vuejscrudapp',
+            data: {
+                patients: [],
+            },
+            methods: {
+                showModal(id){
+                    this.$ref[id].show();
+                },
+                hideModal(id){
+                    this.$ref[id].hide();
+                },
+
+                getPacientes(){
+                        axios({
+                        url:'http://127.0.0.1:5000/medico/1',
+                        method: 'get',
+                    })
+                    .then(response => {
+                        console.log(response)
+                        this.patients = response.data.medico1
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+            },
+            mounted(){
+                this.getPacientes()
+            }
+        })
+    </script>
+</body>
+</html>
+
+

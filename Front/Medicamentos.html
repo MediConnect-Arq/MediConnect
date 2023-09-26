@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css">
+    <title>Tabla Medicamentos</title>
+</head>
+<body>
+<div class="container" id="vuejscrudapp">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">Medicamentos</h1>
+            <hr>
+        </div>
+    </div>
+
+    <div>
+        <button onclick="goToPage('Compras.html')" class="btn btn-success">Realizar Compra</button>
+    </div>
+    <br>
+
+    <!--MOSTRAR-->
+    <div class="row">
+        <div class="col-md-4" v-for="med in meds" :key="med.idMedico">
+          <div class="card">
+            <div class="card-body">
+              <td>ID: {{ med.IdMedicamento }}</td><br>
+              <td>Nombre: {{ med.Nombre }}</td><br>
+            </div>
+          </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function goToPage(page) {
+            window.location.href = page;
+    }
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            IdMedicamento: '',
+            nombre: '',
+            meds: [],
+        },
+        methods: {
+            showModal(id) {
+                this.$refs[id].show()
+            },
+
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
+
+            getMedicos() {
+                axios.get('http://127.0.0.1:5000/medicamentos')
+                    .then(response => {
+                        console.log(response)
+                        this.meds = response.data.Medicamento
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+
+      },
+
+        mounted() {
+            this.getMedicos()
+        }
+    })
+</script>
+</body>
+</html>
+
+<style>
+  .card{
+    margin: 20px;
+    padding: 10px;
+    
+  }
+
+.card .card-body .btn
+{
+  margin: 10px auto;
+  align-items: center;
+}
+</style>

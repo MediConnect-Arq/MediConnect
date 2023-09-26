@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue.min.css">
+    <title>Tabla Pacientes</title>
+</head>
+<body>
+<div class="container" id="vuejscrudapp">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">PACIENTES</h1>
+            <hr>
+        </div>
+    </div>
+    <!--AGREGAR-->
+    <div class="row justify-content-between">
+        <div>
+            <b-button @click="showModal('Agregar')" class="btn btn-success">Agregar Paciente</b-button>
+            <b-modal ref="Agregar" hide-footer title="Añade Paciente">
+                <div>
+                    <form action="" @submit.prevent="onSubmit">
+                        <div class="form-group">
+                            <label for="">Nombre</label>
+                            <input type="text" v-model="nombreP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Apellido Paterno</label>
+                            <input type="text" v-model="apellidoPP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Apellido Materno</label>
+                            <input type="text" v-model="apellidoMP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">DNI</label>
+                            <input type="text" v-model="dniP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Genero</label>
+                            <select v-model="generoP" class="form-control">
+                                <option disabled value="">Seleccione</option>
+                                <option>F</option>
+                                <option>M</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Telefono</label>
+                            <input type="text" v-model="telefonoP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Fecha de Nacimiento</label>
+                            <input type="date" v-model="fnacimientoP" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Email</label>
+                            <input type="text" v-model="emailP" class="form-control">
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button @click="hideModal('Agregar')" class="btn btn-danger">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </b-modal>
+        </div>
+    </div>
+
+    <!--MOSTRAR-->
+    <div class="row">
+        <div class="col-md-4" v-for="patient in patients" :key="patient.idPaciente">
+            <div class="card">
+                <div class="card-body">
+                    <td>ID: {{ patient.IdPaciente }}</td><br>
+                    <td>Nombre: {{ patient.NombreP }} {{ patient.ApellidoPP }} {{ patient.ApellidoMP }}</td><br>
+                    <td>DNI: {{ patient.DniP }}</td><br>
+                    <td>Genero: {{ patient.GeneroP }}</td><br>
+                    <td>Email: {{ patient.emailP }}</td><br>
+                    <td>Telefono: {{ patient.TelefonoP }}</td><br>
+                    <td>Fecha de Nacimiento: {{ patient.FNacimientoP }}</td><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            idPaciente: '',
+            nombreP: '',
+            apellidoPP: '',
+            apellidoMP: '',
+            dniP: '',
+            generoP: '',
+            telefonoP: '',
+            fnacimientoP: '',
+            emailP: '',
+            patients: [],
+            eidPaciente: '',
+            enombreP: '',
+            eapellidoPP: '',
+            eapellidoMP: '',
+            edniP: '',
+            egeneroP: '',
+            etelefonoP: '',
+            efnacimientoP: '',
+            eemailP: '',
+        },
+        methods: {
+            showModal(id) {
+                this.$refs[id].show()
+            },
+
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
+
+            onSubmit(){
+                axios.post('http://127.0.0.1:5000/paciente', {
+                    nombreP: this.nombreP,
+                    apellidoPP: this.apellidoPP,
+                    apellidoMP: this.apellidoMP,
+                    dniP: this.dniP,
+                    generoP: this.generoP,
+                    telefonoP: this.telefonoP,
+                    fnacimientoP: this.fnacimientoP,
+                    emailP: this.emailP
+                })
+                .then(res => {
+                    console.log(res)
+                    alert("Paciente agregado")
+                    app.hideModal('Agregar')
+                    app.getPacientes()
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            },
+
+            getPacientes() {
+                axios({
+                    url:'http://127.0.0.1:5000/pacientes',
+                    method: 'get',
+                })
+                .then(response => {
+                    console.log(response)
+                    this.patients = response.data.Pacientes
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+            },
+
+            editPaciente(idPaciente, nombreP, apellidoPP, apellidoMP, dniP, generoP, telefonoP, fnacimientoP, emailP) {
+                axios.get('http://127.0.0.1:5000/paciente/' + idPaciente)
+                .then(res => {
+                    console.log(res.data);
+                    this.eidPaciente = idPaciente
+                    this.enombreP = nombreP
+                    this.eapellidoPP = apellidoPP
+                    this.eapellidoMP = apellidoMP
+                    this.edniP = dniP
+                    this.egeneroP = generoP
+                    this.etelefonoP = telefonoP
+                    this.efnacimientoP = fnacimientoP
+                    this.eemailP = emailP
+                    app.showModal('EditarModal');
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+            },
+
+            onUpdate(){
+                axios.put('http://127.0.0.1:5000/paciente/' + this.eidPaciente,{
+                    nombreP: this.enombreP,
+                    apellidoPP: this.eapellidoPP,
+                    apellidoMP: this.eapellidoMP,
+                    dniP: this.edniP,
+                    generoP: this.egeneroP,
+                    telefonoP: this.etelefonoP,
+                    fnacimientoP: this.efnacimientoP,
+                    emailP: this.eemailP
+                })
+                .then(res =>{
+                    console.log(res)
+                    alert("Paciente actualizado");
+                    this.eidPaciente = '';
+                    this.enombreP = '';
+                    this.eapellidoPP = '';
+                    this.eapellidoMP = '';
+                    this.edniP = '';
+                    this.egeneroP = '';
+                    this.etelefonoP = '';
+                    this.efnacimientoP = '';
+                    this.eemailP = '';
+                    app.hideModal('EditarModal');
+                    app.getPacientes();
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            },
+
+        },
+        mounted:function() 
+        {
+            this.getPacientes()
+        }    
+    })
+</script>
+</body>
+</html>
+
+<style>
+    .card{
+      margin: 20px;
+      padding: 10px;
+      
+    }
+  
+  .card .card-body .btn
+  {
+    margin: 10px auto;
+    align-items: center;
+  }
+</style>

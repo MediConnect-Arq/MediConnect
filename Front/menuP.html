@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediconnect</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container" id="vuejscrudapp">
+                <div>
+                    <h1>Mediconnect</h1>
+                </div>
+                <div class="user-info">
+                    <a href="#"><i class="fas fa-user"></i> 
+                        <span>{{ patients.NombreP}} </span>
+                        <span>{{ patients.ApellidoPP}} </span>   
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="Citas.html"><i class="fas fa-info-circle"></i> Agendar Cita</a></li>
+                    <li><a href="Tratamientos.html"><i class="fas fa-receipt"></i> Historial y Recetas</a></li>
+                    <li><a href="Medicos.html"><i class="fas fa-envelope"></i> Médicos</a></li>
+                    <li><a href="Medicamentos.html"><i class="fas fa-tablets"></i> Farmacia</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content">
+        <div class="card-container">
+            <div class="card button-card">
+                <i class="fas fa-star"></i>
+                <h2>Bienvenido!</h2>
+                <p>Conoce nuestros servicios!</p>
+                <i class="fas fa-arrow-right"></i>
+            </div>
+            <div class="card button-card">
+                <a href="Citas.html" class="button-link">
+                    <i class="fas fa-laptop-medical"></i>
+                    <h2>Médico Virtual</h2>
+                    <p>Excelentes médicos, ahora online! </p>
+                </a>
+            </div>
+            <div class="card button-card">
+                <a href="Citas.html" class="button-link">
+                    <i class="fas fa-hospital"></i>
+                    <h2>Médico Presencial</h2>
+                    <p>Separa tu turno ya!</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="button-container">
+            <button class="btn" onclick="goToPage('Tratamientos.html')">Ver Historial</button>
+            <button class="btn" onclick="goToPage('Medicos.html')">Nuestros doctores</button>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        var app = new Vue({
+            el: '#vuejscrudapp',
+            data: { 
+                idPaciente: '',
+                nombreP: '',
+                apellidoPP: '',
+                patients: [],
+            },
+            methods: {
+                showModal(id){
+                    this.$ref[id].show();
+                },
+                hideModal(id){
+                    this.$ref[id].hide();
+                },
+
+                getPacientes(){
+                        axios({
+                        url:'http://127.0.0.1:5000/paciente/1',
+                        method: 'get',
+                    })
+                    .then(response => {
+                        console.log(response)
+                        this.patients = response.data.paciente1
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+                }
+            },
+            mounted(){
+                this.getPacientes()
+            }
+        })
+    </script>
+</body>
+</html>
+

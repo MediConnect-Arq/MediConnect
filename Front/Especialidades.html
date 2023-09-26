@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css">
+    <title>Tabla Especialidades</title>
+</head>
+<body>
+<div class="container" id="vuejscrudapp">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">Especialidades</h1>
+            <hr>
+        </div>
+    </div>
+    <!--AGREGAR
+    <div class="row justify-content-between">
+      <div>
+        <b-button @click="showModal('Agregar')" class="btn btn-success">Agregar Tratamiento</b-button>
+        <b-modal ref="Agregar" hide-footer title="Añade Tratamiento">
+          <div>
+            <form action="" @submit.prevent="onSubmit">
+              <div class="form-group">
+                <label for="descripcion">Descripcion</label>
+                <input type="text" class="form-control" id="descripcion" v-model="descripcion">
+              </div>
+              <div class="form-group">
+                <label for="duracion">Duracion</label>
+                <input type="text" class="form-control" id="duracion" v-model="duracion">
+              </div>
+              <div class="form-group">
+                <label for="tratamiento">Tratamiento</label>
+                <input type="text" class="form-control" id="tratamiento" v-model="tratamiento">
+              </div>
+              <div class="form-group">
+                <label for="idCita">Cita</label>
+                <input type="text" class="form-control" id="idCita" v-model="idCita">
+              </div>
+              <br>
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Guardar</button>
+                  <button @click="hideModal('Agregar')" class="btn btn-danger">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </b-modal>
+      </div>
+    </div>-->
+
+    <!--MOSTRAR-->
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Medico</th>
+                        <th>Especialidad</th>
+                        <th>Anios Experiencia</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="esp in esps" :key="esp.IdMedico + esp.IdEspecialidad">
+                        <td>{{ esp.IdMedico }}</td>
+                        <td>{{ esp.IdEspecialidad }}</td>
+                        <td>{{ esp.aniosExp }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--EDITAR
+    <div>
+      <b-modal ref="Editar" hide-footer title="Editar Tratamiento">
+        <div>
+          <form @submit.prevent="onUpdate">
+            <div class="form-group">
+              <label for="idMedico">ID Medico</label>
+              <input type="text" class="form-control" id="idMedico" :value="eidMedico" @input="eidMedico = $event.target.value" disabled>
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripcion</label>
+              <input type="text" class="form-control" id="descripcion" :value="edescripcion" @input="edescripcion = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="duracion">Duracion</label>
+              <input type="text" class="form-control" id="duracion" :value="eduracion" @input="eduracion = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="tratamiento">Tratamiento</label>
+              <input type="text" class="form-control" id="tratamiento" :value="etratamiento" @input="etratamiento = $event.target.value">
+            </div>
+              <label for="idCita">Cita</label>
+              <input type="text" class="form-control" id="idCita" :value="idCita" @input="idCita = $event.target.value">
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button variant="online danger" @click="hideModal('Editar')" class="btn btn-danger">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </b-modal>
+    </div>-->
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            IdMedico: '',
+            IdEspecialidad: '',
+            aniosExp: '',
+            esps: [],
+            medicos: {}
+        },
+        methods: {
+            showModal(id) {
+                  this.$refs[id].show()
+            },
+
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
+
+            getTratamientos() {
+                axios.get('http://127.0.0.1:5000/especialidadmedicos')
+                    .then(response => {
+                        console.log(response)
+                        this.esps = response.data.EspecialidadMedico;
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+
+            onSubmit(){
+                axios.post('http://127.0.0.1:5000/especialidadmedico', {
+                  nombreM: this.nombreM,
+                  apellidoPM: this.apellidoPM,
+                  apellidoMM: this.apellidoMM,
+                  dniM: this.dniM,
+                  generoM: this.generoM,
+                  emailM: this.emailM,
+                  telefonoM: this.telefonoM,
+                  numColegialM: this.numColegialM,
+                })
+                .then(res => {
+                  console.log(res)
+                  alert("Medico agregado")
+                  app.hideModal('Agregar')
+                  app.getMedicos()
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+            }, 
+      },
+
+        mounted() {
+            this.getTratamientos()
+            this.getMedico()
+        }
+    })
+</script>
+</body>
+</html>

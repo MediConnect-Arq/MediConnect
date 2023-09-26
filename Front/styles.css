@@ -1,0 +1,149 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #E2F8F6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Estilos de la barra de navegación */
+.navbar {
+    background-color: #A4F4D3;
+    color: rgb(58, 50, 50);
+    padding: 10px 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    transform: translateZ(0); /* Soluciona el problema de la sombra en Safari */
+}
+
+.navbar h1 {
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links {
+    list-style-type: none;
+    padding: 0;
+}
+
+.nav-links li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.nav-links li:last-child {
+    margin-right: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: rgb(58, 50, 50);
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    text-decoration: underline;
+}
+
+.user-info {
+    float: right; /* Alinea a la derecha */
+    color: rgb(58, 50, 50);
+    font-weight: bold;
+    margin-top: 5px; /* Ajusta el espacio superior si es necesario */
+}
+
+.user-info li{
+    display: inline;
+    margin-right: 20px;
+}
+
+.user-info li:last-child {
+    margin-right: 0;
+}
+
+.user-info a {
+    text-decoration: none;
+    color: rgb(58, 50, 50);
+}
+
+.user-info #username {
+    color: rgb(58, 50, 50);
+}
+
+.card-container {
+    display: flex; /* Usa un contenedor flexible */
+    justify-content:center; /* Espacio uniforme entre las cards */
+}
+
+.card {
+    flex-basis: calc(20% - 10px); /* Tamaño de las cards */
+    background: linear-gradient(270deg, rgba(123, 231, 134, 0.50) 17.13%, rgba(89, 175, 103, 0.70) 87.96%);
+    padding: 20px;
+    margin-top: 40px; /* Espacio entre las cards */
+    text-align: center;
+}
+
+.button-card {
+  display: inline-block;
+  color: #000000; /* Color del texto del botón */
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s; /* Efectos de transición */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Sombra predeterminada */
+}
+
+.button-card:hover {
+  transform: translateY(-5px); /* Efecto de flotación al pasar el ratón por encima */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Sombra al pasar el ratón por encima */
+}
+
+/* Estilos para el enlace dentro del botón-card */
+.button-link {
+  text-decoration: none;
+  color: inherit; /* Hereda el color del texto del botón-card */
+}
+
+.button-link i {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.card:first-child {
+    margin-left: 25px;
+    border-radius:  12px 0 0 12px;
+}
+
+.card:last-child {
+    margin-right: 15px; 
+    border-radius: 0 12px 12px 0;
+}
+
+.button-container {
+    text-align: center; /* Centra los botones horizontalmente */
+}
+
+.btn {
+    display: inline-block; /* Coloca los botones uno al lado del otro */
+    background-color: #AEE7B4; /* Color de fondo */
+    color: #000000; /* Color de texto */
+    padding: 20px; /* Espaciado interior */
+    margin: 30px; /* Espacio entre los botones */
+    border: none; /* Quita los bordes */
+    cursor: pointer;
+    font-size: 20px;
+    border-radius: 12px;
+}
+
+.btn:hover {
+  transform: translateY(-5px); /* Efecto de flotación al pasar el ratón por encima */
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2); /* Sombra al pasar el ratón por encima */
+}
+
+
+.card-container i{
+    font-size: 25px;
+}

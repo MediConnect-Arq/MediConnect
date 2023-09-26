@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css">
+    <title>Tabla Schedule</title>
+</head>
+<body>
+<div class="container" id="vuejscrudapp">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">Schedule</h1>
+            <hr>
+        </div>
+    </div>
+    <!--AGREGAR-->
+    <div class="row justify-content-between">
+      <div>
+        <b-button @click="showModal('Agregar')" class="btn btn-success">Agregar Schedule</b-button>
+        <b-modal ref="Agregar" hide-footer title="Añade Schedule">
+          <div>
+            <form action="" @submit.prevent="onSubmit">
+              <div class="form-group">
+                <label for="Fecha">Fecha</label>
+                <input type="date" class="form-control" id="Fecha" v-model="Fecha">
+              </div>
+              <div class="form-group">
+                <label for="Hora">Hora</label>
+                <input type="time" class="form-control" id="Hora" v-model="Hora">
+              </div>
+              <div class="form-group">
+                <label for="IdMedico">Medico</label>
+                <input type="text" class="form-control" id="IdMedico" v-model="IdMedico">
+              </div>
+              <div class="form-group">
+                <label for="IdEspecialidad">Especialidad</label>
+                <input type="text" class="form-control" id="IdEspecialidad" v-model="IdEspecialidad">
+              </div>
+              <br>
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Guardar</button>
+                  <button @click="hideModal('Agregar')" class="btn btn-danger">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </b-modal>
+      </div>
+    </div>
+
+    <!--MOSTRAR-->
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Medico</th>
+                        <th>Especialidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="sch in schs" :key="sch.IdSchedule">
+                        <td>{{ sch.IdSchedule }}</td>
+                        <td>{{ sch.Fecha }}</td>
+                        <td>{{ sch.Hora }}</td>
+                        <td>{{ sch.IdMedico }}</td>
+                        <td>{{ sch.IdEspecialidad }}</td>
+                        <td>
+                            <button @click="editsch(sch.IdSchedule, sch.Fecha, sch.Hora, sch.IdMedico, sch.IdEspecialidad)"
+                            class="btn btn-primary"> Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--EDITAR-->
+    <div>
+      <b-modal ref="Editar" hide-footer title="Editar Schedule">
+        <div>
+          <form action="" @submit.prevent="onUpdate">
+            <div class="form-group">
+              <label for="IdSchedule">ID</label>
+              <input type="text" class="form-control" id="IdSchedule" :value="eIdSchedule" @input="eIdSchedule = $event.target.value" disabled>
+            </div>
+            <div class="form-group">
+              <label for="Fecha">Fecha</label>
+              <input type="date" class="form-control" id="Fecha" :value="eFecha" @input="eFecha = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="Hora">Hora</label>
+              <input type="time" class="form-control" id="Hora" :value="eHora" @input="eHora = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="IdMedico">Medico</label>
+              <input type="text" class="form-control" id="IdMedico" :value="IdMedico" @input="IdMedico = $event.target.value">
+            </div>
+              <label for="IdEspecialidad">Especialidad</label>
+              <input type="text" class="form-control" id="IdEspecialidad" :value="IdEspecialidad" @input="IdEspecialidad = $event.target.value">
+            </div>
+            <div class="form-group">
+              <button @click="onUpdate" class="btn btn-primary">Guardar</button>
+              <button variant="online danger" @click="hideModal('Editar')" class="btn btn-danger">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </b-modal>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            IdMedico: '',
+            IdEspecialidad: '',
+            Fecha: '',
+            Hora: '',
+            schs: [],
+            eIdMedico: '',
+            eIdEspecialidad: '',
+            eFecha: '',
+            eHora: '',
+            eIdSchedule: ''
+
+        },
+        methods: {
+            showModal(id) {
+                  this.$refs[id].show()
+            },
+
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
+
+            getSchedule() {
+                axios.get('http://127.0.0.1:5000/schedules')
+                    .then(response => {
+                        console.log(response)
+                        this.schs = response.data.Schedule;
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+
+            onSubmit(){
+                axios.get('http://127.0.0.1:5000/medico/${this.IdMedico}')
+                axios.get('http://127.0.0.1:5000/especialidad/${this.IdEspecialidad}')
+                axios.post('http://127.0.0.1:5000/schedule', {
+                    Fecha: this.Fecha,
+                    Hora: this.Hora,
+                    IdMedico: this.IdMedico,
+                    IdEspecialidad: this.IdEspecialidad
+                })
+                .then(res => {
+                    console.log(res)
+                    alert("Schedule agregado")
+                    app.hideModal('Agregar')
+                    app.getSchedule()
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            },
+
+            editsch(IdSchedule, Fecha, Hora, IdMedico, IdEspecialidad){
+                axios.get('http://127.0.0.1:5000/schedule/' + IdSchedule)
+                .then(res => {
+                    this.eIdSchedule = IdSchedule
+                    this.eFecha = Fecha
+                    this.eHora = Hora
+                    this.IdMedico = IdMedico
+                    this.IdEspecialidad = IdEspecialidad
+                    app.showModal('Editar')
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            },
+
+            onUpdate(){
+                const url = 'http://127.0.0.1:5000/schedule/' + this.eIdSchedule;
+                axios.put(url, {
+                    Fecha: this.eFecha,
+                    Hora: this.eHora,
+                    IdMedico: this.IdMedico,
+                    IdEspecialidad: this.IdEspecialidad,
+                })
+                .then(res => {
+                    console.log(res)
+                    alert("Schedule actualizado")
+                    this.hideModal('Editar')
+                    this.getSchedule()
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+            }
+        },
+        
+        mounted() {
+            this.getSchedule()
+        }
+    })
+</script>
+</body>
+</html>

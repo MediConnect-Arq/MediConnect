@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css">
+    <title>Tabla Compras</title>
+</head>
+<body>
+<div class="container" id="vuejscrudapp">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">Compras Realizadas</h1>
+            <hr>
+        </div>
+    </div>
+    <!--AGREGAR-->
+    <div class="row justify-content-between">
+      <div>
+        <b-button @click="showModal('Agregar')" class="btn btn-success">Agregar Compra</b-button>
+        <b-modal ref="Agregar" hide-footer title="Añade Tratamiento">
+          <div>
+            <form action="" @submit.prevent="onSubmit">
+              <div class="form-group">
+                <label for="Fecha">Fecha</label>
+                <input type="date" class="form-control" id="Fecha" v-model="Fecha">
+              </div>
+              <div class="form-group">
+                <label for="Cantidad">Cantidad</label>
+                <input type="text" class="form-control" id="Cantidad" v-model="Cantidad">
+              </div>
+              <div class="form-group">
+                <label for="Precio">Precio</label>
+                <input type="text" class="form-control" id="Precio" v-model="Precio">
+              </div>
+              <div class="form-group">
+                <label for="total">Total</label>
+                <input type="text" class="form-control" id="total" v-model="total" disabled>
+              </div>
+              <div class="form-group">
+                <label for="IdTratamiento">Tratamiento</label>
+                <input type="text" class="form-control" id="IdTratamiento" v-model="IdTratamiento">
+              </div>              
+              <div class="form-group">
+                <label for="IdPaciente">Paciente</label>
+                <input type="text" class="form-control" id="IdPaciente" v-model="IdPaciente">
+              </div>
+              <div class="form-group">
+                <label for="IdMedicamento">Medicamento</label>
+                <input type="text" class="form-control" id="IdMedicamento" v-model="IdMedicamento">
+              </div>
+              <br>
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Guardar</button>
+                  <button @click="hideModal('Agregar')" class="btn btn-danger">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </b-modal>
+      </div>
+    </div>
+
+    <!--MOSTRAR-->
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Fecha</th>
+                        <th>Cantidad</th>
+                        <th>Precio</th>
+                        <th>Total</th>
+                        <th>Tratamiento</th>
+                        <th>Paciente</th>
+                        <th>Medicamento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="compra in compras" :key="compra.idTratamiento">
+                        <td>{{ compra.idCompra }}</td>
+                        <td>{{ compra.Fecha }}</td>
+                        <td>{{ compra.Cantidad }}</td>
+                        <td>{{ compra.Precio }}</td>
+                        <td>{{ compra.total }}</td>
+                        <td>{{ compra.IdTratamiento }}</td>
+                        <td>{{ compra.IdPaciente }}</td>
+                        <td>{{ compra.IdMedicamento }}</td>
+                        <td>
+                            <button @click="editCompra(compra.idCompra, compra.Fecha,
+                            compra.Cantidad, compra.Precio,  compra.total, compra.IdTratamiento, compra.IdPaciente, compra.IdMedicamento)" class="btn btn-primary">Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--EDITAR-->
+    <div>
+      <b-modal ref="Editar" hide-footer title="Editar Tratamiento">
+        <div>
+          <form @submit.prevent="onUpdate">
+            <div class="form-group">
+              <label for="idCompra">ID</label>
+              <input type="text" class="form-control" id="idCompra" :value="eidCompra" @input="eidCompra = $event.target.value" disabled>
+            </div>
+            <div class="form-group">
+              <label for="Fecha">Fecha</label>
+              <input type="date" class="form-control" id="Fecha" :value="eFecha" @input="eFecha = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="Cantidad">Cantidad</label>
+              <input type="text" class="form-control" id="Cantidad" :value="eCantidad" @input="eCantidad = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="Precio">Precio</label>
+              <input type="text" class="form-control" id="Precio" :value="ePrecio" @input="ePrecio = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="total">Total</label>
+              <input type="text" class="form-control" id="total" :value="etotal" @input="etotal = $event.target.value" disabled>
+            </div>
+            <div>
+              <label for="IdTratamiento">Tratamiento</label>
+              <input type="text" class="form-control" id="IdTratamiento" :value="IdTratamiento" @input="IdTratamiento = $event.target.value">
+            </div>
+            <div>
+              <label for="IdPaciente">Paciente</label>
+              <input type="text" class="form-control" id="IdPaciente" :value="IdPaciente" @input="IdPaciente = $event.target.value">
+            </div>
+            <div>
+              <label for="IdMedicamento">Medicamento</label>
+              <input type="text" class="form-control" id="IdMedicamento" :value="IdMedicamento" @input="IdMedicamento = $event.target.value">
+            </div>
+            <div class="form-group">
+              <button @click="onUpdate" class="btn btn-primary">Guardar</button>
+              <button variant="online danger" @click="hideModal('Editar')" class="btn btn-danger">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </b-modal>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            idCompra: '',
+            Fecha: '',
+            IdMedicamento: '',
+            Cantidad: '',
+            Precio: '',
+            total: '',
+            IdTratamiento: '',
+            IdPaciente: '',
+            compras: [],
+            eidCompra: '',
+            eFecha: '',
+            eCantidad: '',
+            ePrecio: '',
+            etotal: '',
+            eidTratamiento: '',
+            eIdPaciente: '',
+            eIdMedicamento: '',
+        },
+        methods: {
+            showModal(id) {
+                  this.$refs[id].show()
+            },
+
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
+
+            getTratamientos() {
+                axios.get('http://127.0.0.1:5000/compras')
+                    .then(response => {
+                        console.log(response)
+                        this.compras = response.data.Compra
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+
+            calcular(){
+                if(this.Cantidad != '' && this.Precio != ''){
+                    this.total = this.Cantidad * this.Precio;
+                }
+                else{
+                    this.total = '';
+                } 
+            },
+
+            calcular1(){
+                if(this.eCantidad != '' && this.ePrecio != ''){
+                    this.etotal = this.eCantidad * this.ePrecio;
+                }
+                else{
+                    this.etotal = '';
+                } 
+            },
+
+            onSubmit() {
+                this.calcular();
+              axios.get('http://127.0.0.1:5000/tratamiento/${this.IdTratamiento}')
+              axios.get('http://127.0.0.1:5000/paciente/${this.IdPaciente}')
+              axios.get('http://127.0.0.1:5000/medicamento/${this.IdMedicamento}')
+              axios.post('http://127.0.0.1:5000/compra',{
+                Fecha: this.Fecha,
+                Cantidad: this.Cantidad,
+                Precio: this.Precio,
+                total: this.total,
+                IdTratamiento: this.IdTratamiento,
+                IdPaciente: this.IdPaciente,
+                IdMedicamento: this.IdMedicamento,    
+              })
+              .then(response => {
+                console.log(response)
+                alert('Tratamiento agregado')
+                app.hideModal('Agregar')
+                app.getTratamientos()
+              })
+              .catch(error => {
+                console.log(error)
+                alert('Error al agregar tratamiento')
+              })
+            },
+
+
+            editCompra(idCompra, Fecha, Cantidad, Precio, total, IdTratamiento, IdPaciente, IdMedicamento) {
+
+              axios.get('http://127.0.0.1:5000/compra/' + idCompra)
+              .then(response => {
+                this.eidCompra = idCompra;
+                this.eFecha = Fecha;
+                this.eCantidad = Cantidad;
+                this.ePrecio = Precio;
+                this.etotal = total;
+                this.IdTratamiento = IdTratamiento;
+                this.IdPaciente = IdPaciente;
+                this.IdMedicamento = IdMedicamento;
+                app.showModal('Editar')
+              })
+              .catch(err => {
+                console.log(err)
+              })
+            },
+
+            onUpdate() {
+              this.calcular1();
+              const url = 'http://127.0.0.1:5000/compra/' + this.eidCompra;
+              
+              axios.put(url, {
+                Fecha: this.eFecha,
+                Cantidad: this.eCantidad,
+                Precio: this.ePrecio,
+                total: this.etotal,
+                IdTratamiento: this.IdTratamiento,
+                IdPaciente: this.IdPaciente,
+                IdMedicamento: this.IdMedicamento,
+              })
+              .then(res => {
+                console.log(res);
+                alert('Compra actualizado');
+                this.hideModal('Editar');
+                this.getTratamientos();
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            }
+
+      },
+
+        mounted() {
+            this.getTratamientos()
+        }
+    })
+</script>
+</body>
+</html>

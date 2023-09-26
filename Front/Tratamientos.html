@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css">
+    <title>Tabla Tratamientos</title>
+</head>
+<body>
+<div class="container" id="vuejscrudapp">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <h1 class="text-center">TRATAMIENTOS</h1>
+            <hr>
+        </div>
+    </div>
+    <!--AGREGAR-->
+    <div class="row justify-content-between">
+      <div>
+        <b-button @click="showModal('Agregar')" class="btn btn-success">Agregar Tratamiento</b-button>
+        <b-modal ref="Agregar" hide-footer title="Añade Tratamiento">
+          <div>
+            <form action="" @submit.prevent="onSubmit">
+              <div class="form-group">
+                <label for="descripcion">Descripcion</label>
+                <input type="text" class="form-control" id="descripcion" v-model="descripcion">
+              </div>
+              <div class="form-group">
+                <label for="duracion">Duracion</label>
+                <input type="text" class="form-control" id="duracion" v-model="duracion">
+              </div>
+              <div class="form-group">
+                <label for="tratamiento">Tratamiento</label>
+                <input type="text" class="form-control" id="tratamiento" v-model="tratamiento">
+              </div>
+              <div class="form-group">
+                <label for="idCita">Cita</label>
+                <input type="text" class="form-control" id="idCita" v-model="idCita">
+              </div>
+              <br>
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Guardar</button>
+                  <button @click="hideModal('Agregar')" class="btn btn-danger">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </b-modal>
+      </div>
+    </div>
+
+    <!--MOSTRAR-->
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Descripcion</th>
+                        <th>Duracion</th>
+                        <th>Tratamiento</th>
+                        <th>N de Cita</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="tratamiento in tratamientos" :key="tratamiento.idTratamiento">
+                        <td>{{ tratamiento.IdTratamiento }}</td>
+                        <td>{{ tratamiento.Descripcion }}</td>
+                        <td>{{ tratamiento.Duracion }}</td>
+                        <td>{{ tratamiento.Tratamiento }}</td>
+                        <td>{{ tratamiento.idCita }}</td>
+                        <td>
+                            <button @click="editTratamiento(tratamiento.IdTratamiento, tratamiento.Descripcion,tratamiento.Duracion
+                            ,tratamiento.Tratamiento,tratamiento.idCita)" class="btn btn-primary">Editar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!--EDITAR-->
+    <div>
+      <b-modal ref="Editar" hide-footer title="Editar Tratamiento">
+        <div>
+          <form @submit.prevent="onUpdate">
+            <div class="form-group">
+              <label for="idTratamiento">ID</label>
+              <input type="text" class="form-control" id="idTratamiento" :value="eidTratamiento" @input="eidTratamiento = $event.target.value" disabled>
+            </div>
+            <div class="form-group">
+              <label for="descripcion">Descripcion</label>
+              <input type="text" class="form-control" id="descripcion" :value="edescripcion" @input="edescripcion = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="duracion">Duracion</label>
+              <input type="text" class="form-control" id="duracion" :value="eduracion" @input="eduracion = $event.target.value">
+            </div>
+            <div class="form-group">
+              <label for="tratamiento">Tratamiento</label>
+              <input type="text" class="form-control" id="tratamiento" :value="etratamiento" @input="etratamiento = $event.target.value">
+            </div>
+              <label for="idCita">Cita</label>
+              <input type="text" class="form-control" id="idCita" :value="idCita" @input="idCita = $event.target.value">
+            </div>
+            <div class="form-group">
+              <button @click="onUpdate" class="btn btn-primary">Guardar</button>
+              <button variant="online danger" @click="hideModal('Editar')" class="btn btn-danger">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </b-modal>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-vue/dist/bootstrap-vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var app = new Vue({
+        el: '#vuejscrudapp',
+        data: {
+            idTratamiento: '',
+            descripcion: '',
+            duracion: '',
+            tratamiento: '',
+            idCita: '',
+            tratamientos: [],
+            eidCita: '',
+            eidTratamiento: '',
+            edescripcion: '',
+            eduracion: '',
+            etratamiento: '',
+        },
+        methods: {
+            showModal(id) {
+                  this.$refs[id].show()
+            },
+
+            hideModal(id) {
+                this.$refs[id].hide()
+            },
+
+            getTratamientos() {
+                axios.get('http://127.0.0.1:5000/tratamientos')
+                    .then(response => {
+                        console.log(response)
+                        this.tratamientos = response.data.Tratamientos
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            },
+
+            onSubmit() {
+              axios.get('http://127.0.0.1:5000/cita/${this.idCita}')
+              axios.post('http://127.0.0.1:5000/tratamiento',{
+                descripcion: this.descripcion,
+                duracion: this.duracion,
+                tratamiento: this.tratamiento,
+                idCita: this.idCita
+              })
+              .then(response => {
+                console.log(response)
+                alert('Tratamiento agregado')
+                app.hideModal('Agregar')
+                app.getTratamientos()
+              })
+              .catch(error => {
+                console.log(error)
+                alert('Error al agregar tratamiento')
+              })
+            },
+
+
+            editTratamiento(idTratamiento, descripcion, duracion, tratamiento, idCita) {
+              axios.get('http://127.0.0.1:5000/tratamiento/' + idTratamiento)
+              .then(response => {
+                this.eidTratamiento = idTratamiento;
+                this.edescripcion = descripcion;
+                this.eduracion = duracion;
+                this.etratamiento = tratamiento;
+                this.idCita = idCita;
+                app.showModal('Editar')
+              })
+              .catch(err => {
+                console.log(err)
+              })
+            },
+
+            onUpdate() {
+              const url = 'http://127.0.0.1:5000/tratamiento/' + this.eidTratamiento;
+              
+              axios.put(url, {
+                descripcion: this.edescripcion,
+                duracion: this.eduracion,
+                tratamiento: this.etratamiento,
+                idCita: this.idCita
+              })
+              .then(res => {
+                console.log(res);
+                alert('Tratamiento actualizado');
+                this.hideModal('Editar');
+                this.getTratamientos();
+              })
+              .catch(err => {
+                console.log(err);
+              });
+            }
+
+      },
+
+        mounted() {
+            this.getTratamientos()
+        }
+    })
+</script>
+</body>
+</html>
