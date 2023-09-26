@@ -12,7 +12,7 @@ Nuestro producto se llama MedPro. Esta solución nace a partir de la necesidad d
 [Documentation Swagger](http://3.145.131.226:5000/apidocs/)
 
 
-## Used By
+## Usado por
 
 Este proyecto es usado por las siguientes compañias:
 
